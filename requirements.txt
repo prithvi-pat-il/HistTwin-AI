@@ -1,0 +1,16 @@
+bing-image-downloader
+tensorflow
+pandas
+numpy
+matplotlib
+scikit-learn
+
+google-generativeai
+fastapi
+uvicorn
+python-multipart
+requests
+openai
+omnivoice
+soundfile
+python-dotenv

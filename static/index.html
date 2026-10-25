@@ -1,0 +1,228 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>HistTwin AI - Raigad Historical Virtual Guide</title>
+    <link rel="icon" type="image/png" href="logo.png">
+    
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+    
+    <!-- Three.js and GLTFLoader -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/loaders/GLTFLoader.js"></script>
+
+    <link rel="stylesheet" href="style.css?v=80">
+</head>
+
+<body class="bg-[#07080c] text-zinc-100 font-['Outfit'] h-screen overflow-hidden select-none">
+
+    <!-- Faint Muted Background Video (histwinai bg.mp4) without sound -->
+    <video id="bg-video" autoplay loop muted playsinline class="faint-bg-video">
+        <source src="bg.mp4" type="video/mp4">
+    </video>
+
+    <!-- Semi-transparent Waving Raigad Fort Flag Background -->
+    <div class="raigad-flag-bg"></div>
+
+    <div class="app-container flex w-full h-full relative z-10 bg-slate-950/35">
+
+        <!-- Sidebar / Navigation -->
+        <aside class="sidebar w-72 ios-glass-panel border-r border-white/20 p-5 flex flex-col justify-between">
+            <div class="flex flex-col gap-6">
+                <!-- Branding -->
+                <div class="logo flex items-center gap-3 border-b border-white/10 pb-4">
+                    <img src="logo.png" alt="HistTwin AI Logo" class="w-11 h-11 rounded-xl object-cover shadow-lg border border-amber-500/40 shrink-0">
+                    <div>
+                        <h2 class="font-bold text-lg text-white tracking-wide">HistTwin AI</h2>
+                        <p class="text-xs text-amber-400 font-medium">Raigad District Virtual Guide</p>
+                    </div>
+                </div>
+
+                <!-- Virtual Guide Master Toggle Button (OFF BY DEFAULT) -->
+                <div class="virtual-guide-section">
+                    <button id="toggle-guide-btn" class="guide-toggle-btn w-full">
+                        <span class="guide-icon text-xl">🤖</span>
+                        <span class="guide-btn-text">Enable Virtual Guide</span>
+                    </button>
+                    <p class="text-[11px] text-zinc-400 mt-2 text-center">
+                        Toggle to show 3D avatar & natural actions
+                    </p>
+                </div>
+
+                <!-- Settings -->
+                <div class="settings flex flex-col gap-4 mt-2">
+                    <div>
+                        <label class="text-xs font-semibold text-zinc-400 uppercase tracking-wider block mb-2">Language</label>
+                        <select id="language-select" class="w-full bg-zinc-900/90 text-zinc-100 border border-white/15 rounded-xl p-2.5 text-sm focus:outline-none focus:border-amber-500 transition-all">
+                            <option value="English" selected>English</option>
+                            <option value="Hindi">Hindi (हिंदी)</option>
+                            <option value="Marathi">Marathi (मराठी)</option>
+                        </select>
+                    </div>
+
+                    <div>
+                        <label class="text-xs font-semibold text-zinc-400 uppercase tracking-wider block mb-2">Speech Engine (TTS API)</label>
+                        <select id="tts-engine-select" class="w-full bg-zinc-900/90 text-zinc-100 border border-white/15 rounded-xl p-2.5 text-sm focus:outline-none focus:border-amber-500 transition-all font-medium">
+                            <option value="elevenlabs" selected>⚡ ElevenLabs API (Boy Voice)</option>
+                            <option value="huggingface">🤗 Hugging Face / Neural API</option>
+                        </select>
+                    </div>
+
+                    <div>
+                        <label class="text-xs font-semibold text-zinc-400 uppercase tracking-wider block mb-2">Voice Accent</label>
+                        <select id="voice-select" class="w-full bg-zinc-900/90 text-zinc-100 border border-white/15 rounded-xl p-2.5 text-sm focus:outline-none focus:border-amber-500 transition-all">
+                            <option value="English" selected>English Voice</option>
+                            <option value="Hindi">Hindi Voice</option>
+                            <option value="Marathi">Marathi Voice</option>
+                        </select>
+                    </div>
+                </div>
+            </div>
+
+            <!-- New Chat Button -->
+            <button id="clear-chat" class="w-full bg-zinc-900/70 hover:bg-zinc-800/90 border border-white/15 text-zinc-200 py-3 rounded-xl font-medium text-sm flex items-center justify-center gap-2 transition-all shadow-md">
+                <span>✨</span> New Chat
+            </button>
+        </aside>
+
+        <!-- Main Chat Panel -->
+        <main class="chat-area flex-1 flex flex-col relative bg-transparent">
+            <!-- Header -->
+            <header class="chat-header h-16 border-b border-white/10 px-6 flex items-center justify-between ios-glass-panel">
+                <div class="flex items-center gap-3">
+                    <img src="logo.png" alt="HistTwin AI" class="w-7 h-7 rounded-lg object-cover border border-amber-500/40 shadow-sm">
+                    <span class="w-2.5 h-2.5 rounded-full bg-emerald-400 animate-pulse"></span>
+                    <h3 class="font-semibold text-zinc-200">HistTwin AI Virtual Guide</h3>
+                </div>
+                <div id="guide-status-badge" class="text-xs px-3 py-1 rounded-full bg-zinc-900/80 text-zinc-400 border border-white/10">
+                    Mode: <span class="font-semibold text-zinc-300">Standard Text</span>
+                </div>
+            </header>
+
+            <!-- Chat Messages Container -->
+            <div id="messages-container" class="messages-container flex-1 overflow-y-auto p-6 space-y-6">
+                <!-- Welcome Message -->
+                <div class="message ai flex items-start gap-4">
+                    <img src="logo.png" alt="HistTwin AI" class="w-10 h-10 rounded-2xl object-cover shrink-0 shadow-lg border border-amber-500/40 mt-0.5">
+                    <div class="content ios-glass-card px-6 py-5 rounded-2xl max-w-2xl text-zinc-100 leading-relaxed text-sm shadow-xl">
+                        Welcome! I am <b>HistTwin AI</b>, your virtual guide to Raigad district. Ask me about historical forts, monuments, or upload an image to identify a landmark!
+                    </div>
+                </div>
+            </div>
+
+            <!-- Chat Input Controls -->
+            <div class="input-area p-4 border-t border-white/10 ios-glass-panel">
+                <div id="attachment-preview" class="hidden mb-3 p-2 ios-glass-card rounded-xl inline-flex items-center gap-2">
+                    <img id="preview-img" src="" alt="preview" class="h-14 rounded-lg object-cover">
+                    <button id="remove-attachment" class="text-red-400 hover:text-red-300 px-2 font-bold text-lg">&times;</button>
+                </div>
+
+                <div class="input-controls flex items-center gap-3 ios-glass-input rounded-2xl p-2.5 px-3 focus-within:border-amber-500/60 transition-all">
+                    <!-- Voice Input (Mic) SVG -->
+                    <button id="mic-btn" class="input-icon-btn p-2 rounded-xl text-zinc-400 hover:text-amber-400 hover:bg-white/10 transition-all" title="Voice Input">
+                        <svg viewBox="0 0 24 24" width="20" height="20" fill="currentColor">
+                            <path d="M12 14c1.66 0 3-1.34 3-3V5c0-1.66-1.34-3-3-3S9 3.34 9 5v6c0 1.66 1.34 3 3 3zm5-3c0 2.76-2.24 5-5 5s-5-2.24-5-5H5c0 3.53 2.61 6.43 6 6.92V21h2v-3.08c3.39-.49 6-3.39 6-6.92h-2z"></path>
+                        </svg>
+                    </button>
+                    
+                    <!-- Camera SVG -->
+                    <button id="camera-btn" class="input-icon-btn p-2 rounded-xl text-zinc-400 hover:text-amber-400 hover:bg-white/10 transition-all" title="Take Photo">
+                        <svg viewBox="0 0 24 24" width="20" height="20" fill="currentColor">
+                            <path d="M12 15c1.66 0 3-1.34 3-3s-1.34-3-3-3-3 1.34-3 3 1.34 3 3 3zm9-8h-3.17l-1.86-2H8.03L6.17 7H3c-1.1 0-2 .9-2 2v12c0 1.1.9 2 2 2h18c1.1 0 2-.9 2-2V9c0-1.1-.9-2-2-2zm0 14H3V9h4.05l1.83-2h6.24l1.83 2H21v12z"></path>
+                        </svg>
+                    </button>
+                    
+                    <!-- Upload Image (Paperclip) SVG -->
+                    <button id="upload-btn" class="input-icon-btn p-2 rounded-xl text-zinc-400 hover:text-amber-400 hover:bg-white/10 transition-all" title="Upload Image">
+                        <svg viewBox="0 0 24 24" width="20" height="20" fill="currentColor">
+                            <path d="M16.5 6v11.5c0 2.21-1.79 4-4 4s-4-1.79-4-4V5c0-1.38 1.12-2.5 2.5-2.5s2.5 1.12 2.5 2.5v10.5c0 .55-.45 1-1 1s-1-.45-1-1V6H10v9.5c0 1.38 1.12 2.5 2.5 2.5s2.5-1.12 2.5-2.5V5c0-2.21-1.79-4-4-4s-4 1.79-4 4v12.5c0 3.04 2.46 5.5 5.5 5.5s5.5-2.46 5.5-5.5V6h-1.5z"></path>
+                        </svg>
+                    </button>
+                    
+                    <input type="file" id="file-input" accept="image/*" hidden>
+
+                    <input type="text" id="chat-input" placeholder="Ask HistTwin AI about Raigad..." class="flex-1 bg-transparent border-none text-zinc-100 placeholder-zinc-400 text-sm focus:outline-none px-2 py-1">
+                    
+                    <!-- Send Button SVG -->
+                    <button id="send-btn" class="send-btn bg-gradient-to-r from-amber-500 to-orange-600 hover:from-amber-600 hover:to-orange-700 text-white font-semibold p-2.5 px-3.5 rounded-xl shadow-lg transition-all flex items-center justify-center">
+                        <svg viewBox="0 0 24 24" width="18" height="18" fill="currentColor">
+                            <path d="M2.01 21L23 12 2.01 3 2 10l15 2-15 2z"></path>
+                        </svg>
+                    </button>
+                </div>
+            </div>
+        </main>
+
+        <!-- 3D Avatar Panel (Virtual Guide Panel) -->
+        <div id="character-panel" class="character-panel w-96 ios-glass-panel border-l border-white/10 flex flex-col justify-between hidden character-arrival-animation">
+            <div class="panel-header p-4 border-b border-white/10 flex items-center justify-between">
+                <h4 class="font-semibold text-sm text-zinc-200 flex items-center gap-2">
+                    <span>🤖</span> 3D Virtual Guide
+                </h4>
+                <button id="toggle-panel-btn" class="text-zinc-400 hover:text-zinc-200 transition-all text-sm" title="Hide Panel">✕</button>
+            </div>
+
+            <!-- Three.js Canvas Container -->
+            <div id="avatar-container" class="avatar-container flex-1 relative bg-black/50">
+                <!-- 3D Canvas injected here -->
+            </div>
+
+            <!-- Avatar Model Selectors -->
+            <div class="panel-controls p-4 border-t border-white/10 space-y-3 bg-zinc-950/60">
+                <div>
+                    <label for="avatar-select" class="text-[11px] font-semibold text-zinc-400 uppercase tracking-wider block mb-1">Avatar Model</label>
+                    <select id="avatar-select" class="w-full bg-zinc-900 text-zinc-200 border border-white/15 rounded-xl p-2 text-xs focus:outline-none focus:border-amber-500">
+                        <option value="girl_talking.glb" selected>👩 Talking 3D Girl (Dynamic Sync)</option>
+                        <option value="indian_girl_sculpture.glb">🚩 Indian Girl Sculpture</option>
+                        <option value="green_dress_girl.glb">👧 Stylized 3D Girl</option>
+                        <option value="RobotExpressive.glb">🤖 Futuristic Robot</option>
+                    </select>
+                </div>
+
+                <div>
+                    <label for="expression-select" class="text-[11px] font-semibold text-zinc-400 uppercase tracking-wider block mb-1">Facial Expression</label>
+                    <select id="expression-select" class="w-full bg-zinc-900 text-zinc-200 border border-white/15 rounded-xl p-2 text-xs focus:outline-none focus:border-amber-500">
+                        <option value="neutral">Neutral</option>
+                        <option value="happy">Happy</option>
+                        <option value="surprised">Surprised</option>
+                    </select>
+                </div>
+            </div>
+        </div>
+
+        <!-- Glassmorphism Banner when Virtual Guide is OFF -->
+        <div id="guide-off-placeholder" class="character-panel-placeholder w-96 ios-glass-panel border-l border-white/10 p-6 flex flex-col items-center justify-center text-center">
+            <img src="logo.png" alt="HistTwin AI" class="w-16 h-16 rounded-2xl object-cover border border-amber-500/40 shadow-2xl mb-4">
+            <h4 class="font-bold text-zinc-100 mb-2">Virtual Guide Disabled</h4>
+            <p class="text-xs text-zinc-400 leading-relaxed mb-6">
+                Click <b>"Enable Virtual Guide"</b> in the sidebar to view the interactive 3D avatar with natural gestures and smooth character actions.
+            </p>
+            <button id="placeholder-enable-btn" class="bg-gradient-to-r from-amber-500 to-orange-600 hover:from-amber-600 hover:to-orange-700 text-white font-medium px-4 py-2.5 rounded-xl text-xs shadow-xl transition-all">
+                Enable Virtual Guide Now
+            </button>
+        </div>
+
+    </div>
+
+    <!-- Camera Modal -->
+    <div id="camera-modal" class="modal hidden fixed inset-0 z-50 bg-black/85 backdrop-blur-xl flex items-center justify-center p-4">
+        <div class="modal-content ios-glass-panel rounded-2xl p-4 max-w-md w-full flex flex-col items-center gap-4">
+            <video id="camera-stream" autoplay playsinline class="w-full h-64 bg-black rounded-xl object-cover border border-white/10"></video>
+            <canvas id="camera-canvas" hidden></canvas>
+            <div class="modal-actions flex gap-3 w-full">
+                <button id="capture-btn" class="flex-1 bg-amber-500 hover:bg-amber-600 text-white py-2 rounded-xl text-sm font-semibold shadow-lg">Capture</button>
+                <button id="close-camera" class="flex-1 bg-zinc-800 hover:bg-zinc-700 text-zinc-300 py-2 rounded-xl text-sm font-medium">Cancel</button>
+            </div>
+        </div>
+    </div>
+
+    <script type="module" src="script.js?v=80"></script>
+</body>
+
+</html>

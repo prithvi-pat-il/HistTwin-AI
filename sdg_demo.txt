@@ -1,0 +1,50 @@
+1.Introduction:
+The Sustainable Development Goals (SDGs) are a collection of 17 global goals introduced by the United Nations to create a better, safer, and more sustainable world by 2030. These goals focus on important issues such as poverty, education, health, gender equality, employment, inequality, and environmental protection.
+Government Scheme Portal SchemeMate is a web-based application that enables citizens to find government schemes and welfare schemes for which they qualify. There are various government schemes for students, women, farmers, unemployed people, old-age people, economically weaker sections, and many other segments of society. But it is difficult for citizens to know these schemes and the ones which they need.
+SchemeMate aims to solve this problem by providing scheme information in one platform. Users can enter details such as age, gender, income, category, and occupation. Based on these details, the system can help users identify suitable government schemes and provide information such as eligibility criteria, benefits, required documents, application process, and official application links.
+
+2. Project Objective:
+The primary goal of SchemeMate is to make government schemes’ information simple, easy to access, and understandable.
+The major objectives are:
+1.	To provide information about government schemes in one platform.
+2.	To help users identify schemes according to their eligibility.
+3.	To reduce the difficulty of searching for suitable government schemes.
+4.	To improve awareness about government welfare programs.
+
+3. SDG 10 – Reduces Inequalites:
+SchemeMate falls under the scope of SDG 10 – Reduced Inequalities. SDG 10 is concerned with reducing inequalities inside societies as well as across societies while ensuring equal opportunities for individuals regardless of their social-economic background.
+Governments set up various social welfare programs to benefit various sections of the society. Yet, the impact of these programs will not reach everyone if individuals are not aware of them or lack understanding regarding their qualifications.
+
+
+4. How SchemeMate Supports SDG 10:
+4.1 Equal Access to Information
+SchemeMate makes information regarding government schemes available through one platform, making it convenient for people to have access to information on schemes available to them.
+4.2 Support for Disadvantaged Groups
+There are many government schemes that are aimed at economically weaker sections, women, students, farmers, senior citizens, unemployed people, and others. SchemeMate can be very helpful to such users in finding out about schemes that apply to them.
+4.3 Eligibility-Based Recommendation
+SchemeMate identifies suitable schemes for users based on their demographic information like age, income, gender, category, and occupation. It eliminates the need for users to manually look through many schemes to find something that suits them.
+4.4 Digital Accessibility
+SchemeMate provides easy online access to government scheme information, allowing users to view eligibility, benefits, and application details from anywhere. It makes government services more convenient and accessible to a wider range of people.
+
+5. Benefits of the Project
+The major benefits of SchemeMate are:
+1.	Easy Access to Information
+SchemeMate provides government scheme details in one platform. Users can easily find eligibility, benefits, documents, and application information.
+2.	Time Saving
+Users do not need to search through multiple websites for suitable schemes.
+The platform reduces the time and effort required to find relevant information.
+3.	Personalized Recommendations
+SchemeMate recommends suitable schemes based on user details such as age, income, gender, and occupation.
+This helps users quickly identify schemes they may be eligible for.
+4.	Increased Awareness
+The platform helps users discover government schemes they may not know about.
+It improves awareness of available government benefits and opportunities.
+
+6. Future Scope
+Currently, SchemeMate focuses mainly on government schemes available in Maharashtra. In the future, the project can be expanded into a centralized national platform that provides information about government schemes from different states across India. The platform can include both Central Government and State Government schemes, allowing users to select their state and find schemes relevant to their location and eligibility. Schemes from states such as Karnataka, Gujarat, Goa, Madhya Pradesh, Rajasthan, and other states can be gradually integrated into the system.
+This expansion would transform SchemeMate from a Maharashtra-based scheme portal into a single platform for discovering government welfare schemes across India, making government benefits more accessible to citizens from different states.
+
+7. Conclusion 
+SchemeMate is a tech-enabled initiative whose purpose is to help people discover government welfare schemes in an easier and understandable manner. The project focuses mainly on SDG 10 – Reduced Inequalities, which includes better availability of information regarding government initiatives and opportunities.
+With its personalized schemes suggestions depending on the user's eligibility, SchemeMate can help different strata of society discover the government assistance more easily. SchemeMate shows how technology and artificial intelligence can be applied to solve social problems and achieve equal access to opportunities.
+Hence, SchemeMate contributes to SDG 10 through application of technology to government scheme information.

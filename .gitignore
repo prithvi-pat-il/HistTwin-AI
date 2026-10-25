@@ -1,0 +1,57 @@
+# ==========================================
+# HistTwin AI - Git Ignore Configuration
+# ==========================================
+
+# Environment variables & secrets (CRITICAL: Never commit API keys)
+.env
+*.env
+!.env.example
+
+# Python virtual environment & cache
+.venv/
+venv/
+env/
+__pycache__/
+avatar/__pycache__/
+*.py[cod]
+*$py.class
+*.pyd
+
+# Local database & Anaconda workbench files
+anaconda_projects/
+*.db
+*.sqlite3
+
+# Server & application logs
+*.log
+server.log
+
+# Generated audio, video, motion temp files & runtime cache
+static/cache/
+static/speech_*.mp3
+static/motion_*.json
+static/viseme_*.json
+static/visemes_*.json
+static/temp_*
+static/virtual_human_*.mp4
+static/test_*.wav
+/dummy.wav
+
+# Duplicate raw assets in root folder only (clean production copies exist inside static/)
+/girl_talking.glb
+/indian_girl_sculpture.glb
+/green_dress_girl__stylized_3d_character.glb
+/Talking (13).fbx
+/histwinai bg.mp4
+/ChatGPT Image Aug 21, 2026, 08_26_21 AM.png
+/ChatGPT Image Aug 30, 2026, 03_16_43 PM.png
+
+# External heavy submodules & 3D research repositories
+PantoMatrix/
+
+# System & IDE configuration files
+.vscode/
+.idea/
+.DS_Store
+Thumbs.db
+Desktop.ini
